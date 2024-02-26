@@ -21,8 +21,12 @@
 package modifiers
 
 import (
+	"context"
+	"github.com/fuxi-inc/dip-common-lib/IDL"
+	"github.com/pydio/cells/v4/dip"
 	"net/url"
 	"strconv"
+	"strings"
 
 	restful "github.com/emicklei/go-restful/v3"
 	"github.com/gorilla/sessions"
@@ -77,6 +81,24 @@ func LoginPasswordAuth(middleware frontend.AuthMiddleware) frontend.AuthMiddlewa
 		token, err := auth.DefaultJWTVerifier().PasswordCredentialsToken(req.Request.Context(), username, password)
 		if err != nil {
 			return err
+		}
+
+		if username != "admin" {
+			// DIP, 验证用户公私钥
+			publicKey, err := dip.GetPublicKey(context.Background(), strings.Trim(username, ".")+".")
+			if err != nil {
+				return err
+			}
+
+			signatureData := IDL.SignatureData{
+				OperatorDoi:    strings.Trim(username, ".") + ".",
+				SignatureNonce: in.AuthInfo["nonce"],
+				Signature:      in.AuthInfo["signature"],
+			}
+			err = signatureData.VerifySignature(publicKey)
+			if err != nil {
+				return err
+			}
 		}
 
 		_, claims, err := auth.DefaultJWTVerifier().Verify(req.Request.Context(), token.AccessToken)

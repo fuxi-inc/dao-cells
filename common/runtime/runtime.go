@@ -316,6 +316,14 @@ func LogLevel() string {
 	return r.GetString(KeyLog)
 }
 
+func DipDisHost() string {
+	return r.GetString(KeyDipDisHost)
+}
+
+func DipDisQHost() string {
+	return r.GetString(KeyDipDisQHost)
+}
+
 // LogJSON returns the --log_json value
 func LogJSON() bool {
 	return r.GetBool(KeyLogJson)

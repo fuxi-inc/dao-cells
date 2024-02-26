@@ -21,6 +21,9 @@
 package runtime
 
 const (
+	KeyDipDisHost  = "dis_host"
+	KeyDipDisQHost = "disq_host"
+
 	KeyDiscovery    = "discovery"
 	KeyRegistry     = "registry"
 	KeyBroker       = "broker"
@@ -86,6 +89,8 @@ const (
 	HttpServerCaddy  = "caddy"
 	HttpServerNative = "http"
 
+	DefaultDipDisHost      = "http://39.107.180.231:8991"
+	DefaultDipDisQHost     = "http://39.107.180.231:8053"
 	DefaultDiscoveryPort   = "8030"
 	DefaultGrpcPort        = "8031"
 	DefaultBindingSitePort = "8080"

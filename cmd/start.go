@@ -355,6 +355,9 @@ func init() {
 	StartCmd.Flags().Bool(runtime.KeyEnableMetrics, false, "Instrument code to expose internal metrics (to local JSON file, or service discovery if Metrics Basic Auth is set)")
 	StartCmd.Flags().String(runtime.KeyMetricsBasicAuth, "", "Expose metrics to a service discovery endpoint /metrics/sd")
 	StartCmd.Flags().Bool(runtime.KeyEnablePprof, false, "Enable pprof remote debugging")
+	StartCmd.Flags().String(runtime.KeyDipDisHost, runtime.DefaultDipDisHost, "Default Dip dis host")
+	StartCmd.Flags().String(runtime.KeyDipDisQHost, runtime.DefaultDipDisQHost, "Default Dip disq host")
+
 	//StartCmd.Flags().Int(runtime.KeyHealthCheckPort, 0, "Healthcheck port number")
 
 	RootCmd.AddCommand(StartCmd)

