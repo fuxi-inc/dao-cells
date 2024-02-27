@@ -23,6 +23,7 @@ package rest
 import (
 	"context"
 	"fmt"
+	"github.com/pydio/cells/v4/dip"
 	"io"
 	"strings"
 
@@ -348,6 +349,7 @@ func (s *UserHandler) PutUser(req *restful.Request, rsp *restful.Response) {
 		service.RestError500(req, rsp, err)
 		return
 	}
+
 	if inputUser.Login == "" {
 		inputUser.Login = req.PathParameter("Login")
 	}
@@ -359,6 +361,15 @@ func (s *UserHandler) PutUser(req *restful.Request, rsp *restful.Response) {
 		service.RestError500(req, rsp, fmt.Errorf("login field cannot contain a group path"))
 		return
 	}
+
+	//DIP , 验证Login 用户是否在dis中存在
+	inputUser.Login = strings.Trim(inputUser.Login, ".")
+	_, err = dip.GetDW(context.Background(), inputUser.Login)
+	if err != nil {
+		service.RestError500(req, rsp, fmt.Errorf("login user is not in dis:"+err.Error()))
+		return
+	}
+
 	cli := idm.NewUserServiceClient(grpc2.GetClientConnFromCtx(ctx, common.ServiceUser))
 	log.Logger(req.Request.Context()).Debug("Received User.Put API request", inputUser.ZapLogin())
 	var update *idm.User
