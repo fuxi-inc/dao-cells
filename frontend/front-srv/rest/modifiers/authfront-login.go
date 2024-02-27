@@ -46,6 +46,7 @@ func LoginPasswordAuth(middleware frontend.AuthMiddleware) frontend.AuthMiddlewa
 
 		username := in.AuthInfo["login"]
 		password := in.AuthInfo["password"]
+		operator := in.AuthInfo["operator"]
 
 		if challenge, ok := in.AuthInfo["challenge"]; ok {
 			// If we do have a challenge, then we're coming from an external source and
@@ -91,7 +92,7 @@ func LoginPasswordAuth(middleware frontend.AuthMiddleware) frontend.AuthMiddlewa
 			}
 
 			signatureData := IDL.SignatureData{
-				OperatorDoi:    strings.Trim(username, ".") + ".",
+				OperatorDoi:    operator,
 				SignatureNonce: in.AuthInfo["nonce"],
 				Signature:      in.AuthInfo["signature"],
 			}
